@@ -2,6 +2,8 @@
 # Contributor: xiv3r (for original scripts/loader concept)
 # Contributor: h3110w0r1d-y (for BurpLoaderKeygen)
 
+_maintainer_name=$(awk -F': ' '/^# Maintainer:/{print $2; exit}' PKGBUILD)
+
 pkgname=burpsuite-professional
 _burp_display_version="2025.4.2"
 pkgver=${_burp_display_version}
@@ -61,7 +63,7 @@ EOF
   cat > "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE_PKGBUILD_and_Scripts" <<EOF
 MIT License
 
-Copyright (c) $(date +%Y) $(grep -m1 "Maintainer:" PKGBUILD | awk -F'Maintainer: ' '{print $2}')
+Copyright (c) $(date +%Y) ${_maintainer_name}
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this PKGBUILD and associated documentation files (the "Software"), to deal
