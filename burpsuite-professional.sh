@@ -6,7 +6,6 @@ PKG_NAME="__PKG_NAME__"
 BURP_JAR="${INSTALL_DIR}/burpsuite_pro.jar"
 LOADER_JAR="${INSTALL_DIR}/loader.jar"
 
-# Check if essential files exist
 if [ ! -f "${BURP_JAR}" ]; then
     echo "Error (${PKG_NAME}): Burp Suite JAR not found at ${BURP_JAR}" >&2
     echo "The package might be corrupted. Please try reinstalling." >&2
