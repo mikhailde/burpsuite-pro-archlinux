@@ -1,116 +1,87 @@
 # Burp Suite Professional for Arch Linux (Community PKGBUILD)
 
-This repository provides a community-maintained PKGBUILD to build and install Burp Suite Professional on Arch Linux. It is designed to integrate with your system seamlessly, providing a `.desktop` entry for application launchers and a command-line script.
+This repository provides a community-maintained PKGBUILD to build and install Burp Suite Professional on Arch Linux. This setup enables access to the full feature set of the Professional edition.
 
 **Current Burp Suite Version targeted by PKGBUILD:** `2025.4.2`
 
 ---
 
-**⚠️ IMPORTANT: PLEASE READ CAREFULLY BEFORE PROCEEDING ⚠️**
+**⚠️ IMPORTANT CONSIDERATIONS & DISCLAIMER – PLEASE READ CAREFULLY ⚠️**
 
-## Disclaimer & Usage Terms
-
-*   **Unofficial & Community-Maintained:** This PKGBUILD and the resulting Arch Linux package are **not** official, affiliated with, or endorsed by PortSwigger Ltd., the creators of Burp Suite.
-*   **Loader Requirement & Licensing:**
-    *   To unlock Professional features, this setup relies on a third-party `loader.jar` Java agent. **You must obtain `loader.jar` yourself.**
-    *   Using `loader.jar` to activate Burp Suite Professional bypasses its intended licensing mechanism and constitutes a **violation of PortSwigger's End User License Agreement (EULA)**.
-    *   This package and setup are intended for **educational, research, or personal evaluation purposes only**, particularly in scenarios where acquiring a full license might be prohibitive.
-    *   **If you use Burp Suite Professional for commercial activities, production environments, or any form of professional work, you are ethically and legally obligated to purchase an official license from PortSwigger Ltd. to support their continued development.**
-*   **Use at Your Own Risk:** You are solely responsible for any and all legal, ethical, or technical consequences arising from the use of this package and the associated loader. The maintainer of this PKGBUILD and repository assumes **no liability** whatsoever.
-*   **Security of `loader.jar`:** The `loader.jar` is a third-party component. While this guide may refer to common sources, its security, integrity, and functionality **cannot be guaranteed** by the maintainer of this PKGBUILD. Always obtain software from trusted sources and understand the risks involved when using unofficial tools.
+*   **Community Maintained, Not Official:** This PKGBUILD and the resulting Arch Linux package are community-maintained. They are **not** official, affiliated with, or endorsed by PortSwigger Ltd., the creators of Burp Suite.
+*   **Licensing and Activation Component:**
+    *   To enable all Professional features, this setup utilizes a third-party Java agent (referred to as `loader.jar`). **You must obtain this `loader.jar` component yourself.**
+    *   The use of such a component to activate Burp Suite Professional bypasses its standard licensing mechanism. This action is **not in compliance with PortSwigger's End User License Agreement (EULA)**.
+    *   This package and method are intended for **educational, research, or personal evaluation purposes only**, especially in situations where obtaining a full commercial license may not be immediately feasible.
+    *   **For any commercial, production, or professional use of Burp Suite Professional, purchasing an official license from PortSwigger Ltd. is the correct and ethical approach to support their valuable work.**
+*   **Your Responsibility:** You are solely responsible for understanding and adhering to all applicable software licenses and for any consequences arising from your use of this package and the method described. The maintainer of this PKGBUILD and repository assumes **no liability**.
+*   **Third-Party Component Security:** The `loader.jar` is a third-party component. Its security, integrity, and functionality are not guaranteed by the maintainer of this PKGBUILD. Obtain it from sources you trust and understand the inherent risks.
 
 ---
 
 ## Prerequisites
 
-Before you begin, ensure you have the following:
+Before you begin, ensure your system meets the following requirements:
 
-1.  **An Arch Linux System:**
-    *   `base-devel` package group installed (for `makepkg` and other build tools).
+1.  **Arch Linux System:**
+    *   `base-devel` package group installed.
         ```bash
         sudo pacman -S --needed base-devel
         ```
-    *   `git` installed (for cloning this repository).
+    *   `git` installed.
         ```bash
         sudo pacman -S --needed git
         ```
 
 2.  **Java Development Kit (JDK) - Version 21 or Newer:**
-    Burp Suite Professional (recent versions) requires Java 21 or a more recent version to run.
-    *   Install a suitable JDK (OpenJDK is recommended):
+    *   Install a suitable JDK:
         ```bash
-        sudo pacman -S jdk-openjdk 
-        # Or specifically jdk21-openjdk if you prefer that version and it's available
+        sudo pacman -S jdk-openjdk
         ```
-    *   Set the newly installed JDK as the default for your system:
+    *   Set it as the default:
         ```bash
         sudo archlinux-java set <name_of_your_jdk21+_environment>
         # Example: sudo archlinux-java set java-21-openjdk
-        # Check available environments with: archlinux-java status
         ```
-    *   Verify your active Java version:
-        ```bash
-        java -version
-        ```
+    *   Verify: `java -version`
 
-3.  **`loader.jar` (The Key Agent):**
-    *   **You must obtain this file yourself.** This PKGBUILD does **not** download it for you.
-    *   A common source for such loaders is the **`BurpLoaderKeygen`** project by user `h3110w0r1d-y` on GitHub. You will need to search for this repository.
-    *   Download the `loader.jar` from a trusted release or build it from source if you prefer.
-    *   The `PKGBUILD` in this repository expects a `loader.jar` file with the following **SHA256 checksum**:
+3.  **`loader.jar` (Activation Agent):**
+    *   **This component must be obtained by you separately.**
+    *   A common source for such components is the `BurpLoaderKeygen` project by user `h3110w0r1d-y` on GitHub (search for it).
+    *   The `PKGBUILD` expects a `loader.jar` with the SHA256 checksum:
         ```
         dcdf28acf360554a5a98d78f403c96ccea500be24b27d02b020e142820637c0a
         ```
-        You can verify the checksum of your downloaded file with: `sha256sum loader.jar`.
-    *   **Crucial Step:** After downloading, **place the `loader.jar` file in the same directory where you clone this repository** (i.e., alongside the `PKGBUILD` file). `makepkg` will look for it there.
+        Verify with: `sha256sum loader.jar`.
+    *   **Place the `loader.jar` file in the same directory where you clone this repository** (alongside `PKGBUILD`).
 
 ---
 
 ## Installation Guide
 
-Follow these steps carefully to build and install Burp Suite Professional:
-
 1.  **Clone This Repository:**
-    Open your terminal and navigate to a directory where you want to download the build files. Then, clone this repository:
     ```bash
     git clone https://github.com/mikhailde/burpsuite-pro-archlinux.git
     cd burpsuite-pro-archlinux/ 
     ```
 
 2.  **Place `loader.jar`:**
-    As mentioned in the Prerequisites, ensure your downloaded `loader.jar` (matching the specified SHA256 sum) is now located in this cloned directory. The directory structure should look something like:
-    ```
-    .
-    ├── PKGBUILD
-    ├── burpsuite-professional.desktop
-    ├── burpsuite-professional.install
-    ├── burpsuite-professional.sh
-    ├── burp_suite.ico
-    ├── loader.jar  <-- YOUR DOWNLOADED LOADER HERE
-    └── README.md
-    ```
+    Ensure your `loader.jar` (matching the specified SHA256 sum) is in the current directory.
 
-3.  **(Optional) Verify and Update `PKGBUILD`:**
-    *   Open the `PKGBUILD` file.
-    *   Ensure the `_burp_display_version` variable reflects the Burp Suite version you intend to install (the download URL fetches the latest, this is mostly for display).
-    *   Double-check that the `sha256sums` entry for `loader.jar` matches the checksum of your file. If you are using a different (but trusted) `loader.jar`, you'll need to update this checksum in the `PKGBUILD` or `makepkg` will fail.
+3.  **(Optional) Review `PKGBUILD`:**
+    *   Check `_burp_display_version`.
+    *   Confirm `sha256sums` for `loader.jar`.
 
-4.  **Build and Install the Package:**
-    From within the cloned repository directory (where the `PKGBUILD` is), run:
+4.  **Build and Install:**
     ```bash
     makepkg -si
     ```
-    This command will:
-    *   Download the latest official Burp Suite Professional JAR from PortSwigger.
-    *   Verify the checksums of all source files (including your local `loader.jar`).
-    *   Build the Arch Linux package (`.pkg.tar.zst`).
-    *   Install the package onto your system using `pacman` (it will ask for your sudo password).
-    *   Install any missing dependencies (like Java, if not already present).
+    This will download Burp Suite, verify files, build the package, and install it.
 
 5.  **Post-Installation & Activation:**
-    *   After successful installation, the `.install` script will provide brief instructions.
-    *   **First-time Activation (if Burp Suite prompts for a license):**
-        1.  Launch the Key Generator/Loader:
+    *   The `.install` script will provide brief guidance after installation.
+    *   **Activation (if prompted by Burp Suite):**
+        1.  Launch the `loader.jar` agent:
             ```bash
             java -jar /opt/burpsuite-professional/loader.jar
             ```
@@ -118,74 +89,48 @@ Follow these steps carefully to build and install Burp Suite Professional:
             ```bash
             burpsuite-professional
             ```
-            (Or find "Burp Suite Professional" in your application menu).
-        3.  In Burp Suite, when prompted for a license, choose the **manual activation** option.
-        4.  Copy the "license request" string from Burp Suite and paste it into the appropriate field in the `loader.jar` window.
-        5.  The loader will generate a "license response". Copy this response.
-        6.  Paste the "license response" back into Burp Suite's manual activation window.
-        7.  Click "Next" or "Activate". Burp Suite Professional should now be activated.
-    *   The loader acts as a Java agent, so Burp Suite needs to be launched via the provided `burpsuite-professional` script (or `.desktop` entry) for the loader to be active.
+            (Or from your application menu).
+        3.  In Burp Suite, choose **manual activation**.
+        4.  Copy the "license request" from Burp Suite to the loader.
+        5.  Copy the generated "license response" from the loader back to Burp Suite.
+        6.  Complete activation in Burp Suite.
+    *   Burp Suite must be launched via the `burpsuite-professional` script/desktop entry for the agent to be active.
 
 ---
 
 ## Usage
 
-*   **Launch from Application Menu:** Search for "Burp Suite Professional".
-*   **Launch from Terminal:**
+*   **Application Menu:** "Burp Suite Professional".
+*   **Terminal:**
     ```bash
-    burpsuite-professional
-    ```
-    You can pass command-line arguments to Burp Suite as well:
-    ```bash
-    burpsuite-professional --help
-    burpsuite-professional --project-file=/path/to/project.burp --user-config-file=/path/to/config.json
+    burpsuite-professional [arguments]
     ```
 
 ---
 
 ## Updating the Package
 
-When a new version of Burp Suite Professional is released, or if this PKGBUILD is updated:
-
-1.  **Navigate to the Cloned Repository Directory:**
-    ```bash
-    cd burpsuite-pro-archlinux/
-    ```
-
-2.  **Pull Latest Changes from this Git Repository:**
-    ```bash
-    git pull origin main
-    ```
-    This will update the `PKGBUILD` and other helper scripts if they've changed.
-
-3.  **Check `loader.jar`:**
-    *   Ensure your `loader.jar` is still present in the directory.
-    *   The `sha256sums` for `loader.jar` in the updated `PKGBUILD` might have changed if a new "standard" loader is recommended. Verify and update your `loader.jar` or the checksum if necessary.
-
-4.  **Rebuild and Reinstall:**
-    ```bash
-    makepkg -si
-    ```
-    `pacman` will handle the upgrade process. Your existing Burp Suite settings should generally be preserved.
+1.  `cd burpsuite-pro-archlinux/`
+2.  `git pull origin main`
+3.  Verify `loader.jar` and its checksum in the updated `PKGBUILD`.
+4.  `makepkg -si`
 
 ---
 
 ## Uninstallation
 
-To remove the package from your system:
 ```bash
 sudo pacman -Rns burpsuite-professional
 ```
-The `-n` flag prevents `pacman` from saving configuration files (Burp Suite typically stores its user configs in `~/.BurpSuite` or `~/.java/.userPrefs/burp`, which this command won't touch). The `-s` flag removes unneeded dependencies.
 
 ---
 
 ## Troubleshooting
 
-*   **`UnsupportedClassVersionError`:** You are using an older version of Java. Ensure Java 21+ is installed and set as default (see Prerequisites).
-*   **`loader.jar` Checksum Mismatch:** The `sha256sum` of your `loader.jar` does not match the one in `PKGBUILD`. Either get the correct `loader.jar` or update the checksum in `PKGBUILD` (if you trust your `loader.jar`).
-*   **Activation Issues:** Double-check the manual activation steps. Ensure the loader is running and you are copying/pasting the request/response keys correctly. Some loaders may have specific quirks.
+*   **`UnsupportedClassVersionError`:** Ensure Java 21+ is default.
+*   **`loader.jar` Checksum Mismatch:** Get `loader.jar` matching PKGBUILD's sum or update sum if you trust your file.
+*   **Activation Issues:** Double-check manual activation steps; ensure loader is running.
 
 ---
 
-*This PKGBUILD is provided in the hope that it will be useful, but WITHOUT ANY WARRANTY. Use responsibly.*
+*This PKGBUILD is provided by the community. Please use software responsibly and respect licensing terms.*
