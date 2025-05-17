@@ -1,0 +1,47 @@
+_pkgname="burpsuite-professional"
+
+post_install() {
+  echo "--------------------------------------------------------------------"
+  echo " ${_pkgname} has been installed to /opt/${_pkgname}/."
+  echo ""
+  echo " Current Java version set as default:"
+  if command -v archlinux-java &> /dev/null; then
+    archlinux-java status | grep "(default)"
+  else
+    echo " 'archlinux-java' command not found. Your Java setup might be non-standard."
+    echo " Please ensure 'java' command points to a compatible version (21+)."
+    java -version 2>&1 | head -n 1
+  fi
+  echo ""
+  echo " IMPORTANT: ${_pkgname} requires Java 21 or newer."
+  echo " If you encounter 'UnsupportedClassVersionError', please ensure you have"
+  echo " a compatible Java version installed and set as default using:"
+  echo "   sudo archlinux-java set <java_version_name_jdk21_or_newer>"
+  echo "   (e.g., sudo archlinux-java set java-21-openjdk)"
+  echo ""
+  echo " This package utilizes a third-party loader for full functionality."
+  echo " Please refer to the README file from the source repository for:"
+  echo "   - Detailed instructions on obtaining and using the loader."
+  echo "   - Important information regarding software licensing and terms of use."
+  echo ""
+  echo " Basic activation steps (see README for full context):"
+  echo " 1. Ensure the loader is correctly set up (as per README)."
+  echo " 2. Launch Burp Suite: ${_pkgname}"
+  echo " 3. If prompted, follow manual activation procedures."
+  echo "--------------------------------------------------------------------"
+}
+
+post_upgrade() {
+  post_install
+}
+
+post_remove() {
+  echo "--------------------------------------------------------------------"
+  echo " ${_pkgname} has been removed."
+  echo " Program files from /opt/${_pkgname}/ and /usr/bin/${_pkgname}} are deleted."
+  echo " The .desktop entry and icon are also removed."
+  echo ""
+  echo " User-specific configuration files (typically in ~/.BurpSuite or ~/.config/BurpSuite)"
+  echo " and user-created project files are NOT removed by this package."
+  echo "--------------------------------------------------------------------"
+}
