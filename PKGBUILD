@@ -9,7 +9,7 @@ pkgrel=1
 pkgdesc="Burp Suite Professional for Arch Linux (community maintained, requires loader)"
 arch=('any')
 url="https://portswigger.net/burp/pro"
-license=('custom:Proprietary::BurpSuitePro' 'MIT::Loader' 'MIT::PKGBUILD_and_Scripts')
+license=('custom:Proprietary::BurpSuitePro' 'MIT::PKGBUILD_and_Scripts')
 depends=('java-runtime-openjdk>=21' 'java-environment-openjdk>=21')
 optdepends=('jre-openjdk-headless: for running without GUI (if applicable to loader/activation)')
 source=(
@@ -56,35 +56,6 @@ Use of this software is subject to PortSwigger's End User License Agreement (EUL
 This package may include or require third-party components to enable all features;
 refer to the source repository's README for details on licensing and usage.
 Purchasing an official license is recommended for commercial or production use.
-EOF
-
-  cat > "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE_Loader" <<EOF
-The 'loader.jar' component, if used, is typically sourced from projects like
-h3110w0r1d-y/BurpLoaderKeygen, often provided under the MIT License.
-
-MIT License (Example - verify actual license of your loader.jar)
-
-Copyright (c) <Year> <Loader Author>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-Note: The use of such a loader may violate Burp Suite's EULA.
 EOF
 
   cat > "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE_PKGBUILD_and_Scripts" <<EOF
